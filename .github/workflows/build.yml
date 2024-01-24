@@ -38,10 +38,7 @@ jobs:
         node-version: '20.x'
         cache: 'npm'
     - run: npm ci
-    - name: Test and Coverage
-      run: npm run test
-    - name: Update Coverage Badge
-      uses: nolleh/jest-badge-deploy-action@latest
+    - run: npm run test
     - run: npm run apidoc
     - name: Setup Pages
       uses: actions/configure-pages@v4

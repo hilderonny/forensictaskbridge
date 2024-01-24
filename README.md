@@ -2,8 +2,6 @@
 
 Web application for retrieving forensic analysis tasks from clients and distributing them to worker machines.
 
-[![Coverage Status](https://github.com/hilderonny/forensictaskbridge/raw/gh-pages/badges/coverage-jest%20coverage.svg?raw=true)](https://hilderonny.github.io/forensictaskbridge/badges/coverage-jest%20coverage.svg?raw=true)
-
 ## Overview
 
 This server application is used for the forensic analysis of files. It receives files and a description what to do with the files from different client programs like:

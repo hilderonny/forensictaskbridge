@@ -27,7 +27,7 @@ function saveTasks() {
  * 
  * @apiSuccess {Object[]}   tasks                                       List of running tasks. Can be empty when no task is running.
  * @apiSuccess {String}     tasks.id                                    Unique ID of the task.
- * @apiSuccess {String}     tasks.type                                  Name of the task to run. Can be "transcribe", "translate" or "classifyimage"
+ * @apiSuccess {String}     tasks.type                                  Type of the task to run. Can be "transcribe", "translate" or "classifyimage"
  * @apiSuccess {String}     tasks.filename                              File name of the object to process within the input directory
  * @apiSuccess {Boolean}    tasks.inprogress                            "true" when the task is currently processed by a worker, "false" when not
  * @apiSuccess {Object}     tasks.properties                            Additional properties for specific tasks
@@ -210,6 +210,85 @@ apiRouter.post('/reporttranscribecompletion/:id', function(req, res) {
     tasks.splice(tasks.indexOf(matchingTask), 1)
     saveTasks()
     res.send()
+})
+
+/**
+ * @api {get} /api/tasks/status/:id/ Get task status
+ * @apiVersion 1.0.0
+ * @apiGroup Workers
+ * 
+ * @apiParam {String} id            ID of the task to check
+ * 
+ * @apiSuccess {String="waiting","inprogress","completed"}   status                                     Status of the task. "waiting" means that the task is reported but not started yet. "inprogress" means that some worker is handling the task currently.
+ * @apiSuccess {Object}                                      task                                       Structure with task information. Only set when the task is completed.
+ * @apiSuccess {String}                                      task.id                                    Unique ID of the task.
+ * @apiSuccess {String}                                      task.type                                  Type of the task. Can be "transcribe", "translate" or "classifyimage"
+ * @apiSuccess {String}                                      task.filename                              File name of the object within the input directory
+ * @apiSuccess {Object}                                      task.properties                            Settings for the task. Depends on the task type
+ * @apiSuccess {Boolean}                                     task.completedat                           ISO time of the completion of the task by the worker
+ * @apiSuccess {Object}                                      task.result                                Result of the task completion. Content depends on the task type
+ *
+ * @apiSuccessExample {json} In progress:
+ *     HTTP/1.1 200 OK
+ *     {
+ *         "status": "inprogress"
+ *     }
+ *
+ * @apiSuccessExample {json} Completed:
+ *     HTTP/1.1 200 OK
+ *     {
+ *         "status": "completed",
+ *         "task": {
+ *             "id": "bb086c2a-cb15-43fc-923f-fab49d70ddd2",
+ *             "type": "transcribe",
+ *             "filename": "abc.txt",
+ *             "properties": {
+ *                 "transcribemodel": "tiny"
+ *             },
+ *             "completedat": "2024-01-24T13:42:21.238Z"
+ *             "result": {
+ *                 "language": "de",
+ *                 "originaltext": "holla",
+ *                 "englishtext": "die waldfee"
+ *             },
+ *         }
+ *     }
+ * 
+ * @apiError (400 Bad Request) TaskNotFound There was no task for the given <i>id</i>
+ * @apiError (500 Server Error) FileAccessError When the task has a result file but it cannot be read
+ * 
+ * @apiErrorExample {json} Error-Response:
+ *     HTTP/1.1 400 Bad Request
+ *     {
+ *         "error": "TaskNotFound"
+ *     }
+ */
+apiRouter.get('/status/:id', function(req, res) {
+    const id = req.params.id
+    const matchingTask = tasks.find(task => task.id === id)
+    if (matchingTask) {
+        res.send({ status: matchingTask.inprogress ? "inprogress" : "waiting" })
+        return
+    } else {
+        const resultAbsolutePath = path.join(absoluteOutputPath, id.substring(0, 6).split("").join("/"))
+        const absoluteOutputFilePath = path.join(resultAbsolutePath, id)
+        if (!fs.existsSync(absoluteOutputFilePath)) {
+            res.status(400).send({ error: "TaskNotFound" })
+            return
+        } else {
+            fs.readFile(absoluteOutputFilePath, "utf8", (error, data) => {
+                if (error) {
+                    res.status(500).send({ error: error })
+                } else {
+                    const task = JSON.parse(data)
+                    res.send({
+                        status: "completed",
+                        task: task
+                    })
+                }
+            })
+        }
+    }
 })
 
 module.exports = apiRouter

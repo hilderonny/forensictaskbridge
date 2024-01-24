@@ -2,7 +2,7 @@
 
 Web application for retrieving forensic analysis tasks from clients and distributing them to worker machines.
 
-+ [![cov](https://hilderonny.github.io/forensictaskbridge/badges/coverage.svg)](https://github.com/hilderonny/forensictaskbridge/actions)
+[![Coverage Status](https://github.com/hilderonny/forensictaskbridge/raw/gh-pages/badges/coverage-jest%20coverage.svg?raw=true)](https://hilderonny.github.io/forensictaskbridge/badges/coverage-jest%20coverage.svg?raw=true)
 
 ## Overview
 

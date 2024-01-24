@@ -35,3 +35,13 @@ npm ci
 ## Development
 
 For developing purposes simply open the directory in Visual Studio Code and use the "Debug" command.
+
+### ApiDoc
+
+The API documentation can be found at the SubUrl `/apidoc`. To generate it, install `apidoc` as global dependency and run the following command from a command line (not Powershell).
+The apidoc is not part of the repository itself.
+
+```
+npm install -g apidoc
+apidoc -i api -o public/apidoc
+```

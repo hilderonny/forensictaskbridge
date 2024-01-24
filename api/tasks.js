@@ -2,6 +2,7 @@ const config = require("../config.json")
 const path = require("path")
 const fs = require("fs")
 const absoluteInputPath = path.resolve(config.inputPath)
+const absoluteOutputPath = path.resolve(config.outputPath)
 const crypto = require("crypto")
 const tasks = []
 const express = require("express")
@@ -16,7 +17,7 @@ fs.readFile("./tasks.json", "utf8", (error, data) => {
 })
 
 function saveTasks() {
-    fs.writeFileSync("./tasks.json", JSON.stringify(tasks, null, 2), 'utf8');
+    fs.writeFileSync("./tasks.json", JSON.stringify(tasks, null, 2), "utf8");
 }
 
 /**
@@ -167,6 +168,48 @@ apiRouter.get('/taketranscribetask/:transcribemodel', function(req, res) {
             filename: firstMatchingTask.filename
         })
     }
+})
+
+/**
+ * @api {post} /api/tasks/reporttranscribecompletion/:id Report transcription completion
+ * @apiVersion 1.0.0
+ * @apiGroup Workers
+ * 
+ * @apiParam {String} id            ID of the completed transcription task
+ * 
+ * @apiBody {String} language       Detected language
+ * @apiBody {String} originaltext   Transcribed original text
+ * @apiBody {String} englishtext    Transcribed text translated in to english
+ *
+ * @apiSuccessExample {json} Success-Response:
+ *     HTTP/1.1 200 OK
+ * 
+ * @apiError (400 Bad Request) TaskNotFound There was no task for the given <i>id</i>
+ * 
+ * @apiErrorExample {json} Error-Response:
+ *     HTTP/1.1 400 Bad Request
+ *     {
+ *         "error": "TaskNotFound"
+ *     }
+ */
+apiRouter.post('/reporttranscribecompletion/:id', function(req, res) {
+    const id = req.params.id
+    const matchingTask = tasks.find(task => task.id === id)
+    if (!matchingTask) {
+        res.status(400).send({ error: "TaskNotFound" })
+        return
+    }
+    const reportedResult = req.body
+    const resultAbsolutePath = path.join(absoluteOutputPath, id.substring(0, 6).split("").join("/"))
+    fs.mkdirSync(resultAbsolutePath, { recursive: true})
+    const absoluteOutputFilePath = path.join(resultAbsolutePath, id)
+    matchingTask.result = reportedResult
+    matchingTask.completedat = new Date().toISOString()
+    delete matchingTask.inprogress
+    fs.writeFileSync(absoluteOutputFilePath, JSON.stringify(matchingTask, null, 2), "utf8")
+    tasks.splice(tasks.indexOf(matchingTask), 1)
+    saveTasks()
+    res.send()
 })
 
 module.exports = apiRouter

@@ -42,6 +42,5 @@ The API documentation can be found at the SubUrl `/apidoc`. To generate it, inst
 The apidoc is not part of the repository itself.
 
 ```
-npm install -g apidoc
-apidoc -i api -o public/apidoc
+npm run apidoc
 ```

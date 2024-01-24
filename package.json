@@ -6,5 +6,11 @@
     "title": "Forensic task bridge API",
     "version": "1.0.0",
     "sampleUrl": true
+  },
+  "devDependencies": {
+    "apidoc": "^1.2.0"
+  },
+  "scripts": {
+    "apidoc": "apidoc -i api/ -o public/apidoc/"
   }
 }

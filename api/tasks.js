@@ -207,6 +207,10 @@ apiRouter.post('/reporttranscribecompletion/:id', function(req, res) {
     matchingTask.completedat = new Date().toISOString()
     delete matchingTask.inprogress
     fs.writeFileSync(absoluteOutputFilePath, JSON.stringify(matchingTask, null, 2), "utf8")
+    const absoluteInputFilename = path.join(absoluteInputPath, matchingTask.filename)
+    if (fs.existsSync(absoluteInputFilename)) {
+        fs.rmSync(absoluteInputFilename)
+    }
     tasks.splice(tasks.indexOf(matchingTask), 1)
     saveTasks()
     res.send()

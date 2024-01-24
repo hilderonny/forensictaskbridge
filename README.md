@@ -38,7 +38,7 @@ For developing purposes simply open the directory in Visual Studio Code and use 
 
 ### ApiDoc
 
-The API documentation can be found at the SubUrl `/apidoc`. To generate it, install `apidoc` as global dependency and run the following command from a command line (not Powershell).
+The API documentation can be found locally at the SubUrl `/apidoc` or online at https://hilderonny.github.io/forensictaskbridge/. To generate it, install `apidoc` as global dependency and run the following command from a command line (not Powershell).
 The apidoc is not part of the repository itself.
 
 ```

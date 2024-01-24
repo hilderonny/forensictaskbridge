@@ -3,6 +3,7 @@
     "express": "^4.18.2"
   },
   "apidoc": {
+    "name": "Forensic task bridge",
     "title": "Forensic task bridge API",
     "version": "1.0.0",
     "sampleUrl": true

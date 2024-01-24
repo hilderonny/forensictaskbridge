@@ -15,6 +15,6 @@
   },
   "scripts": {
     "apidoc": "apidoc -i api/ -o public/apidoc/",
-    "test": "jest --coverage"
+    "test": "jest --coverage --coverageReporters=\"text\" --coverageReporters=\"json-summary\""
   }
 }

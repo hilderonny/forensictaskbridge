@@ -1,0 +1,172 @@
+const config = require("../config.json")
+const path = require("path")
+const fs = require("fs")
+const absoluteInputPath = path.resolve(config.inputPath)
+const crypto = require("crypto")
+const tasks = []
+const express = require("express")
+const apiRouter = express.Router()
+
+fs.readFile("./tasks.json", "utf8", (error, data) => {
+    if (!error) {
+        for (var task of JSON.parse(data)) {
+            tasks.push(task)
+        }
+    }
+})
+
+function saveTasks() {
+    fs.writeFileSync("./tasks.json", JSON.stringify(tasks, null, 2), 'utf8');
+}
+
+/**
+ * @api {get} /api/tasks Request all running tasks
+ * @apiVersion 1.0.0
+ * @apiGroup Clients
+ * 
+ * @apiSuccess {Object[]}   tasks                                       List of running tasks. Can be empty when no task is running.
+ * @apiSuccess {String}     tasks.id                                    Unique ID of the task.
+ * @apiSuccess {String}     tasks.type                                  Name of the task to run. Can be "transcribe", "translate" or "classifyimage"
+ * @apiSuccess {String}     tasks.filename                              File name of the object to process within the input directory
+ * @apiSuccess {Boolean}    tasks.inprogress                            "true" when the task is currently processed by a worker, "false" when not
+ * @apiSuccess {Object}     tasks.properties                            Additional properties for specific tasks
+ * @apiSuccess {String}     tasks.properties.transcribemodel            For task "transcribe": Defines the Whisper model to use. Can be "tiny", "base", "small", "medium" or "large-v2"
+ * @apiSuccess {String}     tasks.properties.translatesourcelanguage    For task "translate": The source language of the text. E.g. "en"
+ * @apiSuccess {String}     tasks.properties.translatetargetlanguage    For task "translate": The target language in which the text should be translated. E.g. "de"
+ * @apiSuccess {String}     tasks.properties.classifyimagelanguage      For task "classifyimage": The target language of the image classification results. Can be "de" or "en".
+ *
+ * @apiSuccessExample {json} Success-Response:
+ *     HTTP/1.1 200 OK
+ *     [
+ *         {
+ *             "id": "950a0071-dfeb-40c5-9889-a45deb9e69f7",
+ *             "type": "transcribe",
+ *             "filename": "arabic_speec.ogg",
+ *             "inprogress": true,
+ *             "properties": {
+ *                 "transcribemodel": "large-v2"
+ *             }
+ *         },
+ *         {
+ *             "id": "6e5da9d1-ff60-4a3f-a663-892dbb50f347",
+ *             "type": "translate",
+ *             "filename": "english_text.txt",
+ *             "inprogress": true,
+ *             "properties": {
+ *                 "translatesourcelanguage": "en",
+ *                 "translatetargetlanguage": "de"
+ *             }
+ *         },
+ *         {
+ *             "id": "bc7c1468-47da-46af-8155-beabe813535b",
+ *             "type": "classifyimage",
+ *             "filename": "apples.jpg",
+ *             "inprogress": false,
+ *             "properties": {
+ *                 "classifyimagelanguage": "de"
+ *             }
+ *         }
+ *     ]
+ */
+apiRouter.get('/', function(req, res) {
+    res.json(tasks)
+})
+
+/**
+ * @api {post} /api/tasks/addtranscribetask/:filename/:transcribemodel Add a transcribe task
+ * @apiVersion 1.0.0
+ * @apiGroup Clients
+ * 
+ * @apiParam {String}                                            filename            Name of the file to process. Must be located in the input folder
+ * @apiParam {String="tiny","base","small","medium","large-v2"}  transcribemodel     Whisper model to use for transcription.
+ * 
+ * @apiSuccess {String} id                         Unique ID of the newly created transcription task.
+ *
+ * @apiSuccessExample {json} Success-Response:
+ *     HTTP/1.1 200 OK
+ *     {
+ *         "id": "950a0071-dfeb-40c5-9889-a45deb9e69f7"
+ *     }
+ * 
+ * @apiError (400 Bad Request) FileNotFound There was no file in the input folder for the given <i>filename</i>
+ * @apiError (400 Bad Request) ModelNotSupported The given <i>transcribemodel</i> is not supported
+ * 
+ * @apiErrorExample {json} Error-Response:
+ *     HTTP/1.1 400 Bad Request
+ *     {
+ *         "error": "FileNotFound"
+ *     }
+ */
+apiRouter.post('/addtranscribetask/:filename/:transcribemodel', function(req, res) {
+    const filename = req.params.filename
+    const absoluteFilename = path.join(absoluteInputPath, filename)
+    if (!fs.existsSync(absoluteFilename)) {
+        res.status(400).send({ error: "FileNotFound" })
+        return
+    }
+    const transcribemodel = req.params.transcribemodel
+    if (!["tiny","base","small","medium","large-v2"].includes(transcribemodel)) {
+        res.status(400).send({ error: "ModelNotSupported" })
+        return
+    }
+    const task = {
+        id: crypto.randomUUID(),
+        type: "transcribe",
+        filename: filename,
+        inprogress: false,
+        properties: {
+            transcribemodel: transcribemodel
+        }
+    }
+    tasks.push(task)
+    saveTasks()
+    res.send({ id: task.id })
+})
+
+/**
+ * @api {get} /api/tasks/taketranscribetask/:transcribemodel/ Process a transcription task
+ * @apiVersion 1.0.0
+ * @apiGroup Workers
+ * 
+ * @apiParam {String="tiny","base","small","medium","large-v2"}  transcribemodel     Whisper model the worker is able to process
+  * 
+ * @apiSuccess {String} id          Unique ID of the task.
+ * @apiSuccess {String} filename    Filename within the input folder.
+ *
+ * @apiSuccessExample {json} Success-Response:
+ *     HTTP/1.1 200 OK
+ *     {
+ *         "id": "950a0071-dfeb-40c5-9889-a45deb9e69f7",
+ *         "filename": "arabic_speec.ogg"
+ *     }
+ * 
+ * @apiError (400 Bad Request) NoTask There is no matching task in the pipeline
+ * @apiError (400 Bad Request) ModelNotSupported The given <i>transcribemodel</i> is not supported
+ * 
+ * @apiErrorExample {json} Error-Response:
+ *     HTTP/1.1 400 Bad Request
+ *     {
+ *         "error": "NoTask"
+ *     }
+ */
+apiRouter.get('/taketranscribetask/:transcribemodel', function(req, res) {
+    const transcribemodel = req.params.transcribemodel
+    if (!["tiny","base","small","medium","large-v2"].includes(transcribemodel)) {
+        res.status(400).send({ error: "ModelNotSupported" })
+        return
+    }
+    const firstMatchingTask = tasks.find(task => !task.inprogress && task.type === "transcribe" && task.properties.transcribemodel === transcribemodel)
+    if (!firstMatchingTask) {
+        res.status(400).send({ error: "NoTask" })
+        return
+    } else {
+        firstMatchingTask.inprogress = true
+        saveTasks()
+        res.json({
+            id: firstMatchingTask.id,
+            filename: firstMatchingTask.filename
+        })
+    }
+})
+
+module.exports = apiRouter

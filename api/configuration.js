@@ -1,5 +1,5 @@
 /**
- * @api {get} /api/configuration Request configuration information
+ * @api {get} /api/configuration Request configuration
  * @apiVersion 1.0.0
  * @apiName GetConfiguration
  * @apiGroup General
@@ -8,13 +8,13 @@
  * @apiSuccess {Object}   paths.input            Information about the input path where the server receives tasks to process
  * @apiSuccess {String}   paths.input.path       Absolute path on server
  * @apiSuccess {Boolean}  paths.input.exists     "true" when the path exists on the server or "false", when not
- * @apiSuccess {Boolean}  paths.input.canRead    "true" when the path can be read by the server or "false", when not
- * @apiSuccess {Boolean}  paths.input.canWrite   "true" when the path can be written by the server or "false", when not
+ * @apiSuccess {Boolean}  paths.input.canread    "true" when the path can be read by the server or "false", when not
+ * @apiSuccess {Boolean}  paths.input.canwrite   "true" when the path can be written by the server or "false", when not
  * @apiSuccess {Object}   paths.output           Information about the output path where the server puts task results
  * @apiSuccess {String}   paths.output.path      Absolute path on server
  * @apiSuccess {Boolean}  paths.output.exists    "true" when the path exists on the server or "false", when not
- * @apiSuccess {Boolean}  paths.output.canRead   "true" when the path can be read by the server or "false", when not
- * @apiSuccess {Boolean}  paths.output.canWrite  "true" when the path can be written by the server or "false", when not
+ * @apiSuccess {Boolean}  paths.output.canread   "true" when the path can be read by the server or "false", when not
+ * @apiSuccess {Boolean}  paths.output.canwrite  "true" when the path can be written by the server or "false", when not
  *
  * @apiSuccessExample {json} Success-Response:
  *     HTTP/1.1 200 OK
@@ -23,14 +23,14 @@
  *             "input": {
  *                 "path": "/data/input",
  *                 "exists": true,
- *                 "canRead": true,
- *                 "canWrite": false,
+ *                 "canread": true,
+ *                 "canwrite": false,
  *             },
  *             "output": {
  *                 "path": "/data/output",
  *                 "exists": true,
- *                 "canRead": true,
- *                 "canWrite": true,
+ *                 "canread": true,
+ *                 "canwrite": true,
  *             }
  *         }
  *     }
@@ -78,14 +78,14 @@ apiRouter.get('/', function(req, res) {
             input: {
                 path: absoluteInputPath,
                 exists: absoluteInputPathExists,
-                canRead: absoluteInputPathCanRead,
-                canWrite: absoluteInputPathCanWrite
+                canread: absoluteInputPathCanRead,
+                canwrite: absoluteInputPathCanWrite
             },
             output: {
                 path: absoluteOutputPath,
                 exists: absoluteOutputPathExists,
-                canRead: absoluteOutputPathCanRead,
-                canWrite: absoluteOutputPathCanWrite
+                canread: absoluteOutputPathCanRead,
+                canwrite: absoluteOutputPathCanWrite
             }
         }
     })

@@ -8,6 +8,7 @@ const app = express()
 app.use(express.static("public"))
 
 app.use('/api/configuration', require('./api/configuration'))
+app.use('/api/tasks', require('./api/tasks'))
 
 app.listen(port, () => {
     console.log(`Forensic task bridge listening on port ${port}`)

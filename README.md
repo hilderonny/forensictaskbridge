@@ -22,21 +22,18 @@ When the worker finishs it reports the results to the server. When now a client 
 
 ## Installation
 
-First you need to have Apache2 and PHP installed. On Windows XAMPP is a good solution.
+First you need to have Python3 installed.
 
 Next download this repository, for example to `D:\forensictaskbridge`.
 
-Add an alias to this directory in your Apache2 configuration file.
+Now open a command line in this directory. Here you create and activate a virtual environment and install package dependencies. On Windows this is best done via command line because in PowerShell you cannot see directly, which virtual environment is activated.
 
 ```
-<IfModule alias_module>
-    Alias /forensictaskbridge "D:/forensictaskbridge"
-    <Directory "D:/forensictaskbridge">
-        Options Indexes FollowSymLinks Includes ExecCGI
-        AllowOverride All
-        Require all granted
-    </Directory>
-</IfModule>
+python3 -m venv ftb-venv
+ftb-env\Scripts\activate.bat
+pip install -r requirements.txt
 ```
 
-Restart Apache2 and you should be able to open the dashboard via `http://<YOURSERVERURL>/forensictaskbridge`.
+## Development
+
+For developing purposes simply open the directory in Visual Studio Code and use the "Debug" command.

@@ -22,16 +22,14 @@ When the worker finishs it reports the results to the server. When now a client 
 
 ## Installation
 
-First you need to have Python3 installed.
+First you need to have NodeJS installed (https://nodejs.org/en/download).
 
 Next download this repository, for example to `D:\forensictaskbridge`.
 
-Now open a command line in this directory. Here you create and activate a virtual environment and install package dependencies. On Windows this is best done via command line because in PowerShell you cannot see directly, which virtual environment is activated.
+Now open a command line in this directory and install the required dependencies.
 
 ```
-python3 -m venv ftb-venv
-ftb-env\Scripts\activate.bat
-pip install -r requirements.txt
+npm ci
 ```
 
 ## Development

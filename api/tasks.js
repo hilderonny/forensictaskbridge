@@ -78,8 +78,8 @@ apiRouter.get('/', function(req, res) {
  * @apiVersion 1.0.0
  * @apiGroup Clients
  * 
- * @apiParam {String}                                            filename            Name of the file to process. Must be located in the input folder
- * @apiParam {String="tiny","base","small","medium","large-v2"}  transcribemodel     Whisper model to use for transcription.
+ * @apiParam {String}                                                       filename            Name of the file to process. Must be located in the input folder
+ * @apiParam {String="tiny","base","small","medium","large-v2","large-v3"}  transcribemodel     Whisper model to use for transcription.
  * 
  * @apiSuccess {String} id                         Unique ID of the newly created transcription task.
  *
@@ -106,7 +106,7 @@ apiRouter.post('/addtranscribetask/:filename/:transcribemodel', function(req, re
         return
     }
     const transcribemodel = req.params.transcribemodel
-    if (!["tiny","base","small","medium","large-v2"].includes(transcribemodel)) {
+    if (!["tiny","base","small","medium","large-v2","large-v3"].includes(transcribemodel)) {
         res.status(400).send({ error: "ModelNotSupported" })
         return
     }
@@ -129,7 +129,7 @@ apiRouter.post('/addtranscribetask/:filename/:transcribemodel', function(req, re
  * @apiVersion 1.0.0
  * @apiGroup Workers
  * 
- * @apiParam {String="tiny","base","small","medium","large-v2"}  transcribemodel     Whisper model the worker is able to process
+ * @apiParam {String="tiny","base","small","medium","large-v2","large-v3"}  transcribemodel     Whisper model the worker is able to process
   * 
  * @apiSuccess {String} id          Unique ID of the task.
  * @apiSuccess {String} filename    Filename within the input folder.
@@ -152,7 +152,7 @@ apiRouter.post('/addtranscribetask/:filename/:transcribemodel', function(req, re
  */
 apiRouter.get('/taketranscribetask/:transcribemodel', function(req, res) {
     const transcribemodel = req.params.transcribemodel
-    if (!["tiny","base","small","medium","large-v2"].includes(transcribemodel)) {
+    if (!["tiny","base","small","medium","large-v2","large-v3"].includes(transcribemodel)) {
         res.status(400).send({ error: "ModelNotSupported" })
         return
     }

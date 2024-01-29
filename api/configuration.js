@@ -2,7 +2,7 @@
  * @api {get} /api/configuration Request configuration
  * @apiVersion 1.0.0
  * @apiName GetConfiguration
- * @apiGroup General
+ * @apiGroup Configuration
  * 
  * @apiSuccess {Object}   paths                  Path settings
  * @apiSuccess {Object}   paths.input            Information about the input path where the server receives tasks to process

@@ -15,8 +15,58 @@ async function loadTasks() {
     const result = await fetch("/api/tasks")
     const tasks = await result.json()
     const tableBody = document.getElementById("tasks")
-    tableBody.innerHTML = tasks.map(task => `<tr>${["id", "type", "filename", "inprogress"].map(key => `<td>${task[key]}</td>`).join("")}</tr>`).join("")
+    tableBody.innerHTML = ""
+    tasks.sort((a, b) => {
+        if (!a["completedat"]) return -1
+        if (!b["completedat"]) return 1
+        return a["completedat"] > b["completedat"] ? -1 : 1
+    })
+    for (const task of tasks) {
+        const status = task["status"]
+        const tr = document.createElement("tr")
+        tableBody.appendChild(tr)
+        for (const key of ["id", "type", "filename", "status", "completedat"]) {
+            const td = document.createElement("td")
+            td.innerHTML = task[key]
+            tr.appendChild(td)
+        }
+        const actionTd = document.createElement("td")
+        tr.appendChild(actionTd)
+        if (status === "running") {
+            const restartButton = document.createElement("button")
+            restartButton.innerHTML = "Restart"
+            restartButton.addEventListener("click", () => { restartTask(task["id"])})
+            actionTd.appendChild(restartButton)
+        }
+        else if (status === "done") {
+            const resultLink = document.createElement("a")
+            resultLink.setAttribute("href", `/api/tasks/result/${task["id"]}`)
+            resultLink.setAttribute("target", "_blank")
+            resultLink.innerHTML = "Result"
+            actionTd.appendChild(resultLink)
+        }
+        const deleteButton = document.createElement("button")
+        deleteButton.innerHTML = "Delete"
+        deleteButton.addEventListener("click", () => { deleteTask(task["id"]) })
+        actionTd.appendChild(deleteButton)
+}
 }
 
-loadConfiguration()
-loadTasks()
+function load() {
+    loadConfiguration()
+    loadTasks()
+    document.getElementById("time").innerHTML = new Date().toLocaleString()
+}
+
+async function restartTask(taskId) {
+    fetch(`/api/tasks/restart/${taskId}`)
+    loadTasks()
+}
+
+async function deleteTask(taskId) {
+    fetch(`/api/tasks/remove/${taskId}`, { method: "DELETE" })
+    loadTasks()
+}
+
+setInterval(load, 1000)
+load()

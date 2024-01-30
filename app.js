@@ -9,7 +9,6 @@ app.use(express.static("public"))
 app.use('/api/configuration', require('./api/configuration'))
 
 app.use('/api/tasks', require('./api/tasks'))
-app.use('/api/tasks/details', require('./api/tasks/details'))
 app.use('/api/tasks/remove', require('./api/tasks/remove'))
 app.use('/api/tasks/restart', require('./api/tasks/restart'))
 app.use('/api/tasks/result', require('./api/tasks/result'))

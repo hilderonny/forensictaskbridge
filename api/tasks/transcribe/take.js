@@ -34,13 +34,13 @@ apiRouter.get('/:transcribemodel', function(req, res) {
         res.status(400).send({ error: "ModelNotSupported" })
         return
     }
-    const firstMatchingTask = tasksbase.getTasks().find(task => task.status == "waiting" && task.type === "transcribe" && task.properties.transcribemodel === transcribemodel)
+    const firstMatchingTask = tasksbase.find(task => task.status == "waiting" && task.type === "transcribe" && task.properties.transcribemodel === transcribemodel)
     if (!firstMatchingTask) {
         res.status(400).send({ error: "NoTask" })
         return
     } else {
         firstMatchingTask.status = "running"
-        tasksbase.saveTasks()
+        saveTasks()
         res.json({
             id: firstMatchingTask.id,
             filename: firstMatchingTask.filename

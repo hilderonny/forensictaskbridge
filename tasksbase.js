@@ -17,8 +17,10 @@ function createTask(type, filename) {
     const task = {
         id: crypto.randomUUID(),
         type: type,
-        filename: filename,
         status: "waiting"
+    }
+    if (filename) {
+        task.filename = filename
     }
     tasks.push(task)
     return task

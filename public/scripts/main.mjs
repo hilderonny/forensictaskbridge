@@ -32,6 +32,12 @@ async function loadTasks() {
         }
         const actionTd = document.createElement("td")
         tr.appendChild(actionTd)
+        if (status !== "done") {
+            const detailsButton = document.createElement("button")
+            detailsButton.innerHTML = "Details"
+            detailsButton.addEventListener("click", () => { window.alert(JSON.stringify(task, null, "    ")) })
+            actionTd.appendChild(detailsButton)
+        }
         if (status === "running") {
             const restartButton = document.createElement("button")
             restartButton.innerHTML = "Restart"

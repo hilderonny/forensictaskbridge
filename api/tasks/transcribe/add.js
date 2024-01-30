@@ -8,7 +8,7 @@ const apiRouter = express.Router()
  * @apiGroup Transcription
  * 
  * @apiParam {String}                                                       filename            Name of the file to process. Must be located in the input folder
- * @apiParam {String="tiny","base","small","medium","large-v2","large-v3"}  transcribemodel     Whisper model to use for transcription.
+ * @apiParam {String="tiny","base","small","medium","large-v2"}  transcribemodel     Whisper model to use for transcription.
  * 
  * @apiSuccess {String} id                         Unique ID of the newly created transcription task.
  *
@@ -34,7 +34,7 @@ apiRouter.post('/:filename/:transcribemodel', function(req, res) {
         return
     }
     const transcribemodel = req.params.transcribemodel
-    if (!["tiny","base","small","medium","large-v2","large-v3"].includes(transcribemodel)) {
+    if (!["tiny","base","small","medium","large-v2"].includes(transcribemodel)) {
         res.status(400).send({ error: "ModelNotSupported" })
         return
     }

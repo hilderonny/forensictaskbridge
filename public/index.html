@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Forensic Task Bridge</title>
+        <script type="module" src="scripts/main.mjs"></script>
+    </head>
+    <body>
+        <h1>Forensic Task Bridge</h1>
+
+        <p id="time"></p>
+
+        <h2>Tasks</h2>
+
+        <table border="1">
+            <thead>
+                <tr>
+                    <th>Id</th>
+                    <th>Type</th>
+                    <th>Filename</th>
+                    <th>Status</th>
+                    <th>Completed at</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody id="tasks"></tbody>
+        </table>
+    
+        <h2>Configuration</h2>
+
+        <table border="1">
+            <tr>
+                <th>Input path</th>
+                <td id="inputPath"></td>
+                <td id="inputPathExists"></td>
+                <td id="inputPathCanRead"></td>
+                <td id="inputPathCanWrite"></td>
+            </tr>
+            <tr>
+                <th>Output path</th>
+                <td id="outputPath"></td>
+                <td id="outputPathExists"></td>
+                <td id="outputPathCanRead"></td>
+                <td id="outputPathCanWrite"></td>
+            </tr>
+        </table>
+
+
+        <p>
+            <a href="apidoc">API documentation</a>
+        </p>
+    </body>
+</html>

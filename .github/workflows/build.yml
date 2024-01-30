@@ -5,9 +5,9 @@ name: Node.js Build, Test and ApiDoc
 
 on:
   push:
-    branches: [ "nodejs-express" ]
+    branches: [ "main" ]
   pull_request:
-    branches: [ "nodejs-express" ]
+    branches: [ "main" ]
   # Allows you to run this workflow manually from the Actions tab
   workflow_dispatch:
 

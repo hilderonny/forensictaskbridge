@@ -3,15 +3,13 @@ const express = require("express")
 const apiRouter = express.Router()
 
 /**
- * @api {post} /api/tasks/translate/reportcompletion/:id Report transcription completion
+ * @api {post} /api/tasks/translate/reportcompletion/:id Report translation completion
  * @apiVersion 1.0.0
- * @apiGroup Transcription
+ * @apiGroup Translation
  * 
- * @apiParam {String} id            ID of the completed transcription task
+ * @apiParam {String} id                  ID of the completed translation task
  * 
- * @apiBody {String} language       Detected language
- * @apiBody {String} originaltext   Transcribed original text
- * @apiBody {String} englishtext    Transcribed text translated in to english
+ * @apiBody {String} translatedtext       Text translated into the requested language
  *
  * @apiSuccessExample Success
  *     HTTP/1.1 200 OK

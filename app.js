@@ -14,6 +14,10 @@ app.use('/api/tasks/restart', require('./api/tasks/restart'))
 app.use('/api/tasks/result', require('./api/tasks/result'))
 app.use('/api/tasks/status', require('./api/tasks/status'))
 
+app.use('/api/tasks/classifyimage/add', require('./api/tasks/classifyimage/add'))
+app.use('/api/tasks/classifyimage/reportcompletion', require('./api/tasks/classifyimage/reportcompletion'))
+app.use('/api/tasks/classifyimage/take', require('./api/tasks/classifyimage/take'))
+
 app.use('/api/tasks/transcribe/add', require('./api/tasks/transcribe/add'))
 app.use('/api/tasks/transcribe/reportcompletion', require('./api/tasks/transcribe/reportcompletion'))
 app.use('/api/tasks/transcribe/take', require('./api/tasks/transcribe/take'))

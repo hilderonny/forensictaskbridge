@@ -25,6 +25,13 @@ When the worker finishs it reports the results to the server. When now a client 
 
 First you need to have NodeJS installed (https://nodejs.org/en/download).
 
+On Linux you can do it with:
+
+```
+curl -fsSL https://deb.nodesource.com/setup_21.x | sudo -E bash - &&\
+sudo apt-get install -y nodejs
+```
+
 Next download this repository, for example to `D:\forensictaskbridge`.
 
 Now open a command line in this directory and install the required dependencies.
@@ -37,11 +44,46 @@ npm ci
 
 For developing purposes simply open the directory in Visual Studio Code and use the "Debug" command.
 
-### ApiDoc
+## ApiDoc
 
 The API documentation can be found locally at the SubUrl `/apidoc` or online at https://hilderonny.github.io/forensictaskbridge/. To generate it, install `apidoc` as global dependency and run the following command from a command line (not Powershell).
 The apidoc is not part of the repository itself.
 
 ```
 npm run apidoc
+```
+
+## Running on Linux
+
+Make sure to allow access to the desired port (here `30000`) through your firewall.
+
+```
+sudo ufw allow 30000
+```
+
+Create a SystemD configuration file at ` /etc/systemd/system/forensictaskbridge.service` with this content.
+
+```
+[Unit]
+Description=Forensic Task Bridge
+
+[Service]
+ExecStart=/usr/bin/node /forensictaskbridge/server.js
+Restart=always
+User=user
+Environment=PATH=/usr/bin:/usr/local/bin
+Environment=NODE_ENV=production
+Environment=PORT=30000
+WorkingDirectory=/forensictaskbridge/
+
+[Install]
+WantedBy=multi-user.target
+```
+
+Start the background process by
+
+```
+sudo systemctl daemon-reload
+sudo systemctl start forensictaskbridge
+sudo systemctl enable forensictaskbridge
 ```

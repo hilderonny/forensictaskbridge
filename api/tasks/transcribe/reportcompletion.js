@@ -9,9 +9,17 @@ const apiRouter = express.Router()
  * 
  * @apiParam {String} id            ID of the completed transcription task
  * 
- * @apiBody {String} language       Detected language
- * @apiBody {String} originaltext   Transcribed original text
- * @apiBody {String} englishtext    Transcribed text translated in to english
+ * @apiBody {String}    language                   Detected language
+ * @apiBody {Object}    original                   Text information in the detected language
+ * @apiBody {Object[]}  original.segments          Separate text segments
+ * @apiBody {Number}    original.segments.start    Relative start time of the segment in the media file in milliseconds
+ * @apiBody {Number}    original.segments.end      Relative end time of the segment in the media file in milliseconds
+ * @apiBody {String}    original.segments.text     Transcribed text in the detected language
+ * @apiBody {Object}    en                         Text information in english
+ * @apiBody {Object[]}  en.segments                Separate text segments
+ * @apiBody {Number}    en.segments.start          Relative start time of the segment in the media file in milliseconds
+ * @apiBody {Number}    en.segments.end            Relative end time of the segment in the media file in milliseconds
+ * @apiBody {String}    en.segments.text           Transcribed text in english
  *
  * @apiSuccessExample Success
  *     HTTP/1.1 200 OK

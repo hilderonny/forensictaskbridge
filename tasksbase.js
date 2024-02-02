@@ -41,6 +41,7 @@ function deleteTask(taskId) {
 
 function deleteTaskInputFile(taskId) {
     const matchingTask = tasks.find(task => task.id === taskId)
+    if (!matchingTask.filename) return
     const absoluteInputFilename = path.join(absoluteInputPath, matchingTask.filename)
     if (fs.existsSync(absoluteInputFilename)) {
         fs.rmSync(absoluteInputFilename)

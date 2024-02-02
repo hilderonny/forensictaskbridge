@@ -7,10 +7,13 @@ const apiRouter = express.Router()
  * @apiVersion 1.0.0
  * @apiGroup Translation
  * 
- * @apiSuccess {String} id                Unique ID of the task
- * @apiSuccess {String} sourcelanguage    Language of the original text
- * @apiSuccess {String} targetlanguage    Language in which the text should be translated into
- * @apiSuccess {String} text              Text to translate
+ * @apiSuccess {String} id                         Unique ID of the task
+ * @apiSuccess {String} sourcelanguage             Language of the original text
+ * @apiSuccess {String} targetlanguage             Language in which the text should be translated into
+ * @apiSuccess {Object[]}  segments                Separate text segments
+ * @apiSuccess {Number}    segments.start          Relative start time of the segment in the media file in milliseconds
+ * @apiSuccess {Number}    segments.end            Relative end time of the segment in the media file in milliseconds
+ * @apiSuccess {String}    segments.text           Text to translate
  *
  * @apiSuccessExample {json} Success response
  *     HTTP/1.1 200 OK
@@ -18,7 +21,13 @@ const apiRouter = express.Router()
  *         "id": "950a0071-dfeb-40c5-9889-a45deb9e69f7",
  *         "sourcelanguage": "en",
  *         "targetlanguage": "de",
- *         "text": "Hello world!",
+ *         "segments": [
+ *             {
+ *                 "start": 1234567,
+ *                 "end": 8765342,
+ *                 "text": "Hello world"
+ *             }
+ *         ]
  *     }
  * 
  * @apiError (400 Bad Request) NoTask There is no matching task in the pipeline
@@ -41,7 +50,7 @@ apiRouter.get('/', function(req, res) {
             id: firstMatchingTask.id,
             sourcelanguage: firstMatchingTask.properties.sourcelanguage,
             targetlanguage: firstMatchingTask.properties.targetlanguage,
-            text: firstMatchingTask.properties.text
+            segments: firstMatchingTask.properties.segments
         })
     }
 })

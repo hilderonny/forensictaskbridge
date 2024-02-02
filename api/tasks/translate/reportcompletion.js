@@ -9,7 +9,10 @@ const apiRouter = express.Router()
  * 
  * @apiParam {String} id                  ID of the completed translation task
  * 
- * @apiBody {String} translatedtext       Text translated into the requested language
+ * @apiBody {Object[]}  segments                Separate text segments
+ * @apiBody {Number}    segments.start          Relative start time of the segment in the media file in milliseconds
+ * @apiBody {Number}    segments.end            Relative end time of the segment in the media file in milliseconds
+ * @apiBody {String}    segments.text           Translated text
  *
  * @apiSuccessExample Success
  *     HTTP/1.1 200 OK

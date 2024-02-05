@@ -77,10 +77,13 @@ async function loadTasks() {
         var startedat = task["startedat"]
         if (status === "running" && startedat) {
             var diffsecs = Math.round((Date.now() - startedat) / 1000)
-            durationTd.innerHTML = new Date(diffsecs * 1000).toISOString().substring(14, 19)
-            var green = Math.round(255 - diffsecs / 2)
+            var minutes = Math.floor(diffsecs / 60)
+            var seconds = diffsecs - (minutes * 60)
+            durationTd.innerHTML = `${("" + minutes).padStart(2, "0")}:${("" + seconds).padStart(2, "0")}`
+            var factor = 4
+            var green = Math.round(255 - diffsecs / factor)
             if (green < 0) green = 0
-            var red = Math.round(diffsecs / 2)
+            var red = Math.round(diffsecs / factor)
             if (red > 255) red = 255
             var color = `rgb(${red},${green}, 0)`
             durationTd.style.backgroundColor = color

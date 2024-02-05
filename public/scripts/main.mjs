@@ -31,7 +31,7 @@ async function loadTasks() {
             tr.appendChild(td)
             if (key === "filename") {
                 var filename = task[key]
-                if (filename.length > 5) {
+                if (filename && filename.length > 5) {
                     var lastpart = filename.substring(filename.length - 6)
                     var color = "#" + lastpart
                     if (/^#[0-9A-F]{6}$/i.test(color)) {

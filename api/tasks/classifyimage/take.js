@@ -34,6 +34,8 @@ apiRouter.get('/', function(req, res) {
         return
     } else {
         firstMatchingTask.status = "running"
+        firstMatchingTask.startedat = Date.now()
+        firstMatchingTask.remoteaddress = req.socket.remoteAddress
         tasksbase.saveTasks()
         res.json({
             id: firstMatchingTask.id,

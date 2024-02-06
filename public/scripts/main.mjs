@@ -103,6 +103,16 @@ async function loadTasks() {
         }
         tr.appendChild(remoteaddressTd)
         // Actions
+        const deleteActionTd = document.createElement("td")
+        const deleteButton = document.createElement("button")
+        deleteButton.innerHTML = "Delete"
+        deleteButton.addEventListener("click", () => {
+            if (window.confirm(`Really delete task ${task["id"]}?`)) {
+                deleteTask(task["id"])
+            }
+        })
+        deleteActionTd.appendChild(deleteButton)
+        tr.appendChild(deleteActionTd)
         const detailsActionTd = document.createElement("td")
         if (status !== "done") {
             const detailsButton = document.createElement("button")
@@ -128,12 +138,6 @@ async function loadTasks() {
             resultActionTd.appendChild(resultLink)
         }
         tr.appendChild(resultActionTd)
-        const deleteActionTd = document.createElement("td")
-        const deleteButton = document.createElement("button")
-        deleteButton.innerHTML = "Delete"
-        deleteButton.addEventListener("click", () => { deleteTask(task["id"]) })
-        deleteActionTd.appendChild(deleteButton)
-        tr.appendChild(deleteActionTd)
 }
 }
 

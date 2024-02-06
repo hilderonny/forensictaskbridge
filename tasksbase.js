@@ -17,7 +17,8 @@ function createTask(type, filename) {
     const task = {
         id: crypto.randomUUID(),
         type: type,
-        status: "waiting"
+        status: "waiting",
+        createdat: Date.now()
     }
     if (filename) {
         task.filename = filename
@@ -96,7 +97,7 @@ function saveTaskResult(taskId, result) {
     const absoluteOutputFilePath = path.join(resultAbsolutePath, taskId)
     const matchingTask = tasks.find(task => task.id === taskId)
     matchingTask.result = result
-    matchingTask.completedat = new Date().toISOString()
+    matchingTask.completedat = Date.now()
     matchingTask.status = "done"
     fs.writeFileSync(absoluteOutputFilePath, JSON.stringify(matchingTask, null, 2), "utf8")
     delete matchingTask.result // Save memory in tasks.json

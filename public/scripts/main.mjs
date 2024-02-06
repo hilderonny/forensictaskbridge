@@ -88,6 +88,34 @@ async function loadTasks() {
             var color = `rgb(${red},${green}, 0)`
             durationTd.style.backgroundColor = color
         }
+        var createdat = task["createdat"]
+        if (status === "waiting" && createdat) {
+            var diffsecs = Math.round((Date.now() - createdat) / 1000)
+            var minutes = Math.floor(diffsecs / 60)
+            var seconds = diffsecs - (minutes * 60)
+            durationTd.innerHTML = `${("" + minutes).padStart(2, "0")}:${("" + seconds).padStart(2, "0")}`
+            var factor = 4
+            var green = Math.round(255 - diffsecs / factor)
+            if (green < 0) green = 0
+            var red = Math.round(diffsecs / factor)
+            if (red > 255) red = 255
+            var color = `rgb(${red},${green}, 0)`
+            durationTd.style.backgroundColor = color
+        }
+        var completedat = task["completedat"]
+        if (status === "done" && completedat) {
+            var diffsecs = Math.round((Date.now() - completedat) / 1000)
+            var minutes = Math.floor(diffsecs / 60)
+            var seconds = diffsecs - (minutes * 60)
+            durationTd.innerHTML = `${("" + minutes).padStart(2, "0")}:${("" + seconds).padStart(2, "0")}`
+            var factor = 4
+            var green = Math.round(255 - diffsecs / factor)
+            if (green < 0) green = 0
+            var red = Math.round(diffsecs / factor)
+            if (red > 255) red = 255
+            var color = `rgb(${red},${green}, 0)`
+            durationTd.style.backgroundColor = color
+        }
         tr.appendChild(durationTd)
         // Remote address
         const remoteaddressTd = document.createElement("td")

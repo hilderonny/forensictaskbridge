@@ -102,32 +102,38 @@ async function loadTasks() {
             }
         }
         tr.appendChild(remoteaddressTd)
-        // Action
-        const actionTd = document.createElement("td")
-        tr.appendChild(actionTd)
+        // Actions
+        const detailsActionTd = document.createElement("td")
         if (status !== "done") {
             const detailsButton = document.createElement("button")
             detailsButton.innerHTML = "Details"
             detailsButton.addEventListener("click", () => { window.alert(JSON.stringify(task, null, "    ")) })
-            actionTd.appendChild(detailsButton)
+            detailsActionTd.appendChild(detailsButton)
         }
+        tr.appendChild(detailsActionTd)
+        const restartActionTd = document.createElement("td")
         if (status === "running") {
             const restartButton = document.createElement("button")
             restartButton.innerHTML = "Restart"
             restartButton.addEventListener("click", () => { restartTask(task["id"])})
-            actionTd.appendChild(restartButton)
+            restartActionTd.appendChild(restartButton)
         }
-        else if (status === "done") {
+        tr.appendChild(restartActionTd)
+        const resultActionTd = document.createElement("td")
+        if (status === "done") {
             const resultLink = document.createElement("a")
             resultLink.setAttribute("href", `/api/tasks/result/${task["id"]}`)
             resultLink.setAttribute("target", "_blank")
             resultLink.innerHTML = "Result"
-            actionTd.appendChild(resultLink)
+            resultActionTd.appendChild(resultLink)
         }
+        tr.appendChild(resultActionTd)
+        const deleteActionTd = document.createElement("td")
         const deleteButton = document.createElement("button")
         deleteButton.innerHTML = "Delete"
         deleteButton.addEventListener("click", () => { deleteTask(task["id"]) })
-        actionTd.appendChild(deleteButton)
+        deleteActionTd.appendChild(deleteButton)
+        tr.appendChild(deleteActionTd)
 }
 }
 

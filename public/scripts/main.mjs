@@ -24,11 +24,12 @@ const statuscolors = {
 }
 
 const clientinfos = {
-    "::ffff:127.0.0.1": { "name" : "Seneca", "color": "#87CEFA"},
+    "::ffff:127.0.0.1": { "name" : "Seneca", "color": "#A7EEFA"},
     "::ffff:192.168.0.52": { "name" : "SY UPC Alt", "color": "#FF7F50"},
     "::ffff:192.168.0.151": { "name" : "RH UPC", "color": "#DAA520"},
     "::ffff:192.168.0.153": { "name" : "RH Workbook", "color": "#ADFF2F"},
     "::ffff:192.168.0.154": { "name" : "RH XMG", "color": "#A9A9A9"},
+    "::ffff:192.168.0.156": { "name" : "RH BlueChip", "color": "#8888FF"},
 }
 
 async function loadTasks() {

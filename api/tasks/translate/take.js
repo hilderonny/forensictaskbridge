@@ -1,4 +1,5 @@
 const tasksbase = require("../../../tasksbase")
+const workersApi = require("../../workers")
 const express = require("express")
 const apiRouter = express.Router()
 
@@ -40,6 +41,7 @@ const apiRouter = express.Router()
  */
 apiRouter.get('/', function(req, res) {
     const firstMatchingTask = tasksbase.getTasks().find(task => task.status == "waiting" && task.type === "translate")
+    workersApi.notifyAboutWorker(req.socket.remoteAddress, "translate", firstMatchingTask ? "working" : "idle")
     if (!firstMatchingTask) {
         res.status(400).send({ error: "NoTask" })
         return

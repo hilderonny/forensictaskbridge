@@ -1,4 +1,5 @@
 const tasksbase = require("../../../tasksbase")
+const workersApi = require("../../workers")
 const express = require("express")
 const apiRouter = express.Router()
 
@@ -35,6 +36,7 @@ apiRouter.get('/:transcribemodel', function(req, res) {
         return
     }
     const firstMatchingTask = tasksbase.getTasks().find(task => task.status == "waiting" && task.type === "transcribe" && task.properties.transcribemodel === transcribemodel)
+    workersApi.notifyAboutWorker(req.socket.remoteAddress, "transcribe", firstMatchingTask ? "working" : "idle")
     if (!firstMatchingTask) {
         res.status(400).send({ error: "NoTask" })
         return

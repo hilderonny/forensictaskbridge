@@ -26,4 +26,6 @@ app.use('/api/tasks/translate/add', require('./api/tasks/translate/add'))
 app.use('/api/tasks/translate/reportcompletion', require('./api/tasks/translate/reportcompletion'))
 app.use('/api/tasks/translate/take', require('./api/tasks/translate/take'))
 
+app.use('/api/workers', require('./api/workers'))
+
 module.exports = app

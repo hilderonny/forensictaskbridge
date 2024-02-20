@@ -1,4 +1,4 @@
 {
-    "inputPath": "/data/input",
-    "outputPath": "/data/output"
+    "inputPath": "/ssd_left/data/forensictaskbridge/input",
+    "outputPath": "/ssd_left/data/forensictaskbridge/output"
 }

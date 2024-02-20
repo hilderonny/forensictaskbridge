@@ -14,11 +14,13 @@ async function loadConfiguration() {
 const taskcolors = {
     "transcribe": "#8888FF",
     "translate": "#88FF88",
-    "classifyimage": "FF88FF"
+    "classifyimage": "#FFFF88"
 }
 
 const statuscolors = {
-    "waiting": "#FAFAFF",
+    "idle": "#FAFAFF",
+    "working": "#FFFF00",
+    "waiting": "#F0F0FF",
     "running": "#FFFF00",
     "done": "#00FF00"
 }
@@ -167,12 +169,64 @@ async function loadTasks() {
             resultActionTd.appendChild(resultLink)
         }
         tr.appendChild(resultActionTd)
+    }
 }
+
+async function loadWorkers() {
+    const result = await fetch("/api/workers")
+    const workers = await result.json()
+    const tableBody = document.getElementById("workers")
+    tableBody.innerHTML = ""
+    for (const worker of workers) {
+        const tr = document.createElement("tr")
+        tableBody.appendChild(tr)
+        // Remote address
+        const remoteaddressTd = document.createElement("td")
+        var remoteaddress = worker["remoteaddress"]
+        if (remoteaddress) {
+            const clientDef = clientinfos[remoteaddress]
+            if (clientDef) {
+                remoteaddressTd.innerHTML = clientDef.name
+                remoteaddressTd.style.backgroundColor = clientDef.color
+            } else {
+                remoteaddressTd.innerHTML = remoteaddress
+            }
+        }
+        tr.appendChild(remoteaddressTd)
+        // Type
+        const typeTd = document.createElement("td")
+        var workerType = worker["type"]
+        typeTd.innerHTML = workerType
+        typeTd.style.backgroundColor = taskcolors[workerType]
+        tr.appendChild(typeTd)
+        // Status
+        const statusTd = document.createElement("td")
+        var status = worker["status"]
+        statusTd.innerHTML = status
+        statusTd.style.backgroundColor = statuscolors[status]
+        tr.appendChild(statusTd)
+        // Last Ping
+        const lastPingTd = document.createElement("td")
+        var lastpingat = worker["lastpingat"]
+        var diffsecs = Math.round((Date.now() - lastpingat) / 1000)
+        var minutes = Math.floor(diffsecs / 60)
+        var seconds = diffsecs - (minutes * 60)
+        lastPingTd.innerHTML = `${("" + minutes).padStart(2, "0")}:${("" + seconds).padStart(2, "0")}`
+        var factor = 4
+        var green = Math.round(255 - diffsecs / factor)
+        if (green < 0) green = 0
+        var red = Math.round(diffsecs / factor)
+        if (red > 255) red = 255
+        var color = `rgb(${red},${green}, 0)`
+        lastPingTd.style.backgroundColor = color
+        tr.appendChild(lastPingTd)
+    }
 }
 
 function load() {
     loadConfiguration()
     loadTasks()
+    loadWorkers()
     document.getElementById("time").innerHTML = new Date().toLocaleString()
 }
 

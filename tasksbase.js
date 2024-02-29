@@ -5,9 +5,17 @@ const absoluteInputPath = path.resolve(config.inputPath)
 const absoluteOutputPath = path.resolve(config.outputPath)
 const tasks = []
 
+let taskcount = {
+    classifyimage: 0,
+    transcribe: 0,
+    translate: 0
+}
+
 fs.readFile("./tasks.json", "utf8", (error, data) => {
     if (!error) {
-        for (var task of JSON.parse(data)) {
+        const jsondata = JSON.parse(data)
+        if (jsondata.taskcount) taskcount = jsondata.taskcount
+        for (var task of jsondata.tasks) {
             tasks.push(task)
         }
     }
@@ -58,6 +66,10 @@ function getTaskById(taskId) {
     return tasks.find(task => task.id === taskId)
 }
 
+function getTaskCount() {
+    return taskcount
+}
+
 function getTaskResult(taskId) {
     const resultAbsolutePath = path.join(absoluteOutputPath, taskId.substring(0, 6).split("").join("/"))
     const absoluteOutputFilePath = path.join(resultAbsolutePath, taskId)
@@ -86,6 +98,7 @@ function reportTaskCompletion(req, res) {
     } else {
         saveTaskResult(id, req.body)
         deleteTaskInputFile(id)
+        taskcount[matchingTask.type]++
         saveTasks()
         res.sendStatus(200)
     }
@@ -104,7 +117,10 @@ function saveTaskResult(taskId, result) {
 }
 
 function saveTasks() {
-    fs.writeFileSync("./tasks.json", JSON.stringify(tasks, null, 2), "utf8");
+    fs.writeFileSync("./tasks.json", JSON.stringify({
+        taskcount: taskcount,
+        tasks: tasks
+    }, null, 2), "utf8");
 }
 
 module.exports = { 
@@ -112,7 +128,8 @@ module.exports = {
     deleteTask,
     deleteTaskInputFile,
     doesInputFileExist, 
-    getTaskById, 
+    getTaskById,
+    getTaskCount,
     getTaskResult, 
     getTasks,
     reportTaskCompletion,

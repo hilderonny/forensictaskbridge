@@ -36,7 +36,12 @@ const clientinfos = {
 
 async function loadTasks() {
     const result = await fetch("/api/tasks")
-    const tasks = await result.json()
+    const jsonresult = await result.json()
+    document.getElementById("classifyimage_count").innerHTML = jsonresult.taskcount["classifyimage"].toLocaleString()
+    document.getElementById("translate_count").innerHTML = jsonresult.taskcount["translate"].toLocaleString()
+    document.getElementById("transcribe_count").innerHTML = jsonresult.taskcount["transcribe"].toLocaleString()
+    const currenttime = jsonresult.time
+    const tasks = jsonresult.tasks
     const tableBody = document.getElementById("tasks")
     tableBody.innerHTML = ""
     tasks.sort((a, b) => {
@@ -79,7 +84,7 @@ async function loadTasks() {
         const durationTd = document.createElement("td")
         var startedat = task["startedat"]
         if (status === "running" && startedat) {
-            var diffsecs = Math.round((Date.now() - startedat) / 1000)
+            var diffsecs = Math.round((currenttime - startedat) / 1000)
             var minutes = Math.floor(diffsecs / 60)
             var seconds = diffsecs - (minutes * 60)
             durationTd.innerHTML = `${("" + minutes).padStart(2, "0")}:${("" + seconds).padStart(2, "0")}`
@@ -93,7 +98,7 @@ async function loadTasks() {
         }
         var createdat = task["createdat"]
         if (status === "waiting" && createdat) {
-            var diffsecs = Math.round((Date.now() - createdat) / 1000)
+            var diffsecs = Math.round((currenttime - createdat) / 1000)
             var minutes = Math.floor(diffsecs / 60)
             var seconds = diffsecs - (minutes * 60)
             durationTd.innerHTML = `${("" + minutes).padStart(2, "0")}:${("" + seconds).padStart(2, "0")}`
@@ -107,7 +112,7 @@ async function loadTasks() {
         }
         var completedat = task["completedat"]
         if (status === "done" && completedat) {
-            var diffsecs = Math.round((Date.now() - completedat) / 1000)
+            var diffsecs = Math.round((currenttime - completedat) / 1000)
             var minutes = Math.floor(diffsecs / 60)
             var seconds = diffsecs - (minutes * 60)
             durationTd.innerHTML = `${("" + minutes).padStart(2, "0")}:${("" + seconds).padStart(2, "0")}`
@@ -174,7 +179,9 @@ async function loadTasks() {
 
 async function loadWorkers() {
     const result = await fetch("/api/workers")
-    const workers = await result.json()
+    const jsonresult = await result.json()
+    const currenttime = jsonresult.time
+    const workers = jsonresult.workers
     const tableBody = document.getElementById("workers")
     tableBody.innerHTML = ""
     for (const worker of workers) {
@@ -208,7 +215,7 @@ async function loadWorkers() {
         // Last Ping
         const lastPingTd = document.createElement("td")
         var lastpingat = worker["lastpingat"]
-        var diffsecs = Math.round((Date.now() - lastpingat) / 1000)
+        var diffsecs = Math.round((currenttime - lastpingat) / 1000)
         var minutes = Math.floor(diffsecs / 60)
         var seconds = diffsecs - (minutes * 60)
         lastPingTd.innerHTML = `${("" + minutes).padStart(2, "0")}:${("" + seconds).padStart(2, "0")}`

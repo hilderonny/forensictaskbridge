@@ -8,30 +8,38 @@ const workers = {}
  * @apiVersion 1.0.0
  * @apiGroup General
  * 
- * @apiSuccess {Object[]}   workers                                       List of known workers. Can be empty when no worker reported ts state within the last 60 minutes.
- * @apiSuccess {Number}     workers.remoteaddress                         IP of the worker in IPv6 format.
- * @apiSuccess {Number}     workers.lastpingat                            Unix timestamp from server when the worker pinged the server the last time.
- * @apiSuccess {String}     workers.status                                Status of the worker. Can be "idle" or "working".
- * @apiSuccess {String}     workers.type                                  Type of the task the worker is able to handle. Can be "transcribe", "translate" or "classifyimage"
+ * @apiSuccess {Object}     result                                               Object describing the result.
+ * @apiSuccess {Object[]}   result.workers                                       List of known workers. Can be empty when no worker reported ts state within the last 60 minutes.
+ * @apiSuccess {Number}     result.workers.remoteaddress                         IP of the worker in IPv6 format.
+ * @apiSuccess {Number}     result.workers.lastpingat                            Unix timestamp from server when the worker pinged the server the last time.
+ * @apiSuccess {String}     result.workers.status                                Status of the worker. Can be "idle" or "working".
+ * @apiSuccess {String}     result.workers.type                                  Type of the task the worker is able to handle. Can be "transcribe", "translate" or "classifyimage"
+ * @apiSuccess {Number}     result.time                                          Actual unix timestamp from server for calculating durations independent on the client time.
  *
  * @apiSuccessExample {json} Success-Response:
  *     HTTP/1.1 200 OK
- *     [
- *         {
- *             "lastpingat": 1707484293663,
- *             "remoteaddress": "::ffff:127.0.0.1",
- *             "type": "transcribe"
- *         },
- *         {
- *             "lastpingat": 1707484160951,
- *             "remoteaddress": "::ffff:127.0.0.1",
- *             "type": "translate"
- *         }
- *     ]
+ *     {
+ *         "time": 1707484263238,
+ *         "workers": [
+ *             {
+ *                 "lastpingat": 1707484293663,
+ *                 "remoteaddress": "::ffff:127.0.0.1",
+ *                 "type": "transcribe"
+ *             },
+ *             {
+ *                 "lastpingat": 1707484160951,
+ *                 "remoteaddress": "::ffff:127.0.0.1",
+ *                 "type": "translate"
+ *             }
+ *         ]
+ *     }
  */
 apiRouter.get('/', function(req, res) {
     cleanupWorkers()
-    res.json(Object.values(workers))
+    res.json({
+        time: Date.now(),
+        workers: Object.values(workers)
+    })
 })
 
 apiRouter.notifyAboutWorker = function(remoteaddress, type, status) {

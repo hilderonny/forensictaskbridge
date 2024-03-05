@@ -3,12 +3,13 @@ const express = require("express")
 const apiRouter = express.Router()
 
 /**
- * @api {post} /api/tasks/transcribe/add/:filename/:transcribemodel Add a transcribe task
- * @apiVersion 1.0.0
+ * @api {post} /api/tasks/transcribe/add/:filename/:transcribemodel/:notranslationlanguage     Add a transcribe task
+ * @apiVersion 2.0.0
  * @apiGroup Transcription
  * 
- * @apiParam {String}                                                       filename            Name of the file to process. Must be located in the input folder
- * @apiParam {String="tiny","base","small","medium","large-v2"}  transcribemodel     Whisper model to use for transcription.
+ * @apiParam {String}                                                       filename                  Name of the file to process. Must be located in the input folder
+ * @apiParam {String="tiny","base","small","medium","large-v2"}             transcribemodel           Whisper model to use for transcription.
+ * @apiParam {String}                                                       notranslationlanguage     Language for skipping translation. When the detected language in the audio file is the one given here, no translation into english is done.
  * 
  * @apiSuccess {String} id                         Unique ID of the newly created transcription task.
  *
@@ -27,7 +28,7 @@ const apiRouter = express.Router()
  *         "error": "FileNotFound"
  *     }
  */
-apiRouter.post('/:filename/:transcribemodel', function(req, res) {
+apiRouter.post('/:filename/:transcribemodel/:notranslationlanguage', function(req, res) {
     const filename = req.params.filename
     if (!tasksbase.doesInputFileExist(filename)) {
         res.status(400).send({ error: "FileNotFound" })
@@ -38,9 +39,11 @@ apiRouter.post('/:filename/:transcribemodel', function(req, res) {
         res.status(400).send({ error: "ModelNotSupported" })
         return
     }
+    const notranslationlanguage = req.params.notranslationlanguage
     const task = tasksbase.createTask("transcribe", filename);
     task.properties = {
-        transcribemodel: transcribemodel
+        transcribemodel: transcribemodel,
+        notranslationlanguage: notranslationlanguage
     }
     tasksbase.saveTasks()
     res.send({ id: task.id })

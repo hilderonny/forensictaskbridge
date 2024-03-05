@@ -4,7 +4,7 @@ const apiRouter = express.Router()
 
 /**
  * @api {get} /api/tasks Request all tasks
- * @apiVersion 1.0.0
+ * @apiVersion 2.0.0
  * @apiGroup General
  * 
  * @apiSuccess {Object}     result                                             Object describing the result.
@@ -19,6 +19,8 @@ const apiRouter = express.Router()
  * @apiSuccess {String}     result.tasks.id                                    Unique ID of the task.
  * @apiSuccess {Object}     result.tasks.properties                            Additional properties for specific tasks.
  * @apiSuccess {String}     result.tasks.properties.transcribemodel            For task "transcribe": Defines the Whisper model to use. Can be "tiny", "base", "small", "medium" or "large-v2".
+ * @apiSuccess {String}     result.tasks.properties.transcribenotranslationlanguage     For task "transcribe": Language for skipping translation. When the detected language in the audio file is the one given here, no translation into english is done.
+
  * @apiSuccess {String}     result.tasks.properties.translatesourcelanguage    For task "translate": The source language of the text. E.g. "en".
  * @apiSuccess {String}     result.tasks.properties.translatetargetlanguage    For task "translate": The target language in which the text should be translated. E.g. "de".
  * @apiSuccess {String}     result.tasks.properties.classifyimagelanguage      For task "classifyimage": The target language of the image classification results. Can be "de" or "en".
@@ -44,6 +46,7 @@ const apiRouter = express.Router()
  *                 "id": "950a0071-dfeb-40c5-9889-a45deb9e69f7",
  *                 "properties": {
  *                     "transcribemodel": "large-v2"
+ *                     "transcribenotranslationlanguage": "de"
  *                 },
  *                 "status": "waiting",
  *                 "type": "transcribe"

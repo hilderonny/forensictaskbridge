@@ -61,7 +61,9 @@ Make sure to allow access to the desired port (here `30000`) through your firewa
 sudo ufw allow 30000
 ```
 
-Create a SystemD configuration file at `/etc/systemd/system/forensictaskbridge.service` with this content. Make sure to enter the correct directory where you installed the forensictaskbridge into the lines `ExecStart` and `WorkingDirectory`.
+Create a SystemD configuration file at `/etc/systemd/system/forensictaskbridge.service` with this content.
+Make sure to enter the correct directory where you installed the forensictaskbridge into the lines `ExecStart` and `WorkingDirectory`.
+Enter a valid user name at the `User` line.
 
 ```
 [Unit]

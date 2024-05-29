@@ -4,37 +4,38 @@ const apiRouter = express.Router()
 
 /**
  * @api {get} /api/tasks Request all tasks
- * @apiVersion 2.0.0
+ * @apiVersion 2.1.0
  * @apiGroup General
  * 
- * @apiSuccess {Object}     result                                             Object describing the result.
- * @apiSuccess {Object}     result.taskcount                                   Object describing the task completion statistic
- * @apiSuccess {Number}     result.taskcount.classifyimage                     Number of classifyimage tasks previously completed
- * @apiSuccess {Number}     result.taskcount.transcribe                        Number of transcribe tasks previously completed
- * @apiSuccess {Number}     result.taskcount.translate                         Number of translate tasks previously completed
- * @apiSuccess {Object[]}   result.tasks                                       List of running tasks. Can be empty when no task is running.
- * @apiSuccess {Number}     result.tasks.completedat                           Unix timestamp from server when the task was finished.
- * @apiSuccess {Number}     result.tasks.createdat                             Unix timestamp from server when the task was added to the queue.
- * @apiSuccess {String}     result.tasks.filename                              File name of the object to process within the input directory.
- * @apiSuccess {String}     result.tasks.id                                    Unique ID of the task.
- * @apiSuccess {Object}     result.tasks.properties                            Additional properties for specific tasks.
- * @apiSuccess {String}     result.tasks.properties.transcribemodel            For task "transcribe": Defines the Whisper model to use. Can be "tiny", "base", "small", "medium" or "large-v2".
+ * @apiSuccess {Object}     result                                                      Object describing the result.
+ * @apiSuccess {Object}     result.taskcount                                            Object describing the task completion statistic
+ * @apiSuccess {Number}     result.taskcount.classifyimage                              Number of classifyimage tasks previously completed
+ * @apiSuccess {Number}     result.taskcount.transcribe                                 Number of transcribe tasks previously completed
+ * @apiSuccess {Number}     result.taskcount.translate                                  Number of translate tasks previously completed
+ * @apiSuccess {Object[]}   result.tasks                                                List of running tasks. Can be empty when no task is running.
+ * @apiSuccess {Number}     result.tasks.completedat                                    Unix timestamp from server when the task was finished.
+ * @apiSuccess {Number}     result.tasks.createdat                                      Unix timestamp from server when the task was added to the queue.
+ * @apiSuccess {String}     result.tasks.filename                                       File name of the object to process within the input directory.
+ * @apiSuccess {String}     result.tasks.id                                             Unique ID of the task.
+ * @apiSuccess {Object}     result.tasks.properties                                     Additional properties for specific tasks.
+ * @apiSuccess {String}     result.tasks.properties.classifyimagelanguage               For task "classifyimage": The target language of the image classification results. Can be "de" or "en".
+ * @apiSuccess {String}     result.tasks.properties.scannerprogram                      For task "scanforvirus": Program used for virus scanning. Can be "clamav".
+ * @apiSuccess {String}     result.tasks.properties.transcribemodel                     For task "transcribe": Defines the Whisper model to use. Can be "tiny", "base", "small", "medium" or "large-v2".
  * @apiSuccess {String}     result.tasks.properties.transcribenotranslationlanguage     For task "transcribe": Language for skipping translation. When the detected language in the audio file is the one given here, no translation into english is done.
-
- * @apiSuccess {String}     result.tasks.properties.translatesourcelanguage    For task "translate": The source language of the text. E.g. "en".
- * @apiSuccess {String}     result.tasks.properties.translatetargetlanguage    For task "translate": The target language in which the text should be translated. E.g. "de".
- * @apiSuccess {String}     result.tasks.properties.classifyimagelanguage      For task "classifyimage": The target language of the image classification results. Can be "de" or "en".
- * @apiSuccess {Number}     result.tasks.remoteaddress                         IPv4 or IPv6 address of the worker which processed the task.
- * @apiSuccess {Number}     result.tasks.startedat                             Unix timestamp from server when a worker started processing the task.
- * @apiSuccess {String}     result.tasks.status                                "waiting" when task is waiting for processing, "running" when the task is currently processed by a worker and "done" when the task finished.
- * @apiSuccess {String}     result.tasks.type                                  Type of the task to run. Can be "transcribe", "translate" or "classifyimage"
- * @apiSuccess {Number}     result.time                                        Actual unix timestamp from server for calculating durations independent on the client time.
+ * @apiSuccess {String}     result.tasks.properties.translatesourcelanguage             For task "translate": The source language of the text. E.g. "en".
+ * @apiSuccess {String}     result.tasks.properties.translatetargetlanguage             For task "translate": The target language in which the text should be translated. E.g. "de".
+ * @apiSuccess {Number}     result.tasks.remoteaddress                                  IPv4 or IPv6 address of the worker which processed the task.
+ * @apiSuccess {Number}     result.tasks.startedat                                      Unix timestamp from server when a worker started processing the task.
+ * @apiSuccess {String}     result.tasks.status                                         "waiting" when task is waiting for processing, "running" when the task is currently processed by a worker and "done" when the task finished.
+ * @apiSuccess {String}     result.tasks.type                                           Type of the task to run. Can be "classifyimage", "scanforvirus", "transcribe" or "translate"
+ * @apiSuccess {Number}     result.time                                                 Actual unix timestamp from server for calculating durations independent on the client time.
  *
  * @apiSuccessExample {json} Success-Response:
  *     HTTP/1.1 200 OK
  *     {
  *         "taskcount": {
  *             "classifyimage": 123,
+ *             "scanforvirus": 678,
  *             "transcribe": 234,
  *             "translate": 345,
  *         },
@@ -76,6 +77,19 @@ const apiRouter = express.Router()
  *                 "startedat": 1707484137103,
  *                 "status": "done",
  *                 "type": "classifyimage"
+ *             },
+ *             {
+ *                 "completedat": 1707484160951,
+ *                 "createdat": 1707484100216,
+ *                 "filename": "malware.exe",
+ *                 "id": "bc7c1468-47da-46af-8155-beabe813535b",
+ *                 "properties": {
+ *                     "scannerprogram": "clamav"
+ *                 },
+ *                 "remoteaddress": "::ffff:127.0.0.1",
+ *                 "startedat": 1707484137103,
+ *                 "status": "done",
+ *                 "type": "scanforvirus"
  *             }
  *         ]
  *     }

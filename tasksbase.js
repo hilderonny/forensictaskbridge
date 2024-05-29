@@ -7,6 +7,7 @@ const tasks = []
 
 let taskcount = {
     classifyimage: 0,
+    scanforvirus: 0,
     transcribe: 0,
     translate: 0
 }

@@ -3,7 +3,7 @@ const express = require("express")
 const apiRouter = express.Router()
 
 /**
- * @api {post} /api/tasks/translate/reportcompletion/:id Report transcription completion
+ * @api {post} /api/tasks/transcribe/reportcompletion/:id Report transcription completion
  * @apiVersion 1.0.0
  * @apiGroup Transcription
  * 

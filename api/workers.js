@@ -5,7 +5,7 @@ const workers = {}
 
 /**
  * @api {get} /api/workers Request all workers
- * @apiVersion 1.0.0
+ * @apiVersion 2.1.0
  * @apiGroup General
  * 
  * @apiSuccess {Object}     result                                               Object describing the result.
@@ -13,7 +13,7 @@ const workers = {}
  * @apiSuccess {Number}     result.workers.remoteaddress                         IP of the worker in IPv6 format.
  * @apiSuccess {Number}     result.workers.lastpingat                            Unix timestamp from server when the worker pinged the server the last time.
  * @apiSuccess {String}     result.workers.status                                Status of the worker. Can be "idle" or "working".
- * @apiSuccess {String}     result.workers.type                                  Type of the task the worker is able to handle. Can be "transcribe", "translate" or "classifyimage"
+ * @apiSuccess {String}     result.workers.type                                  Type of the task the worker is able to handle. Can be "classifyimage", "scanforvirus", "transcribe" or "translate"
  * @apiSuccess {Number}     result.time                                          Actual unix timestamp from server for calculating durations independent on the client time.
  *
  * @apiSuccessExample {json} Success-Response:

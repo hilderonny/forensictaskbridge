@@ -12,9 +12,10 @@ async function loadConfiguration() {
 }
 
 const taskcolors = {
+    "classifyimage": "#FFFF88",
+    "scanforvirus": "#FF88FF",
     "transcribe": "#8888FF",
-    "translate": "#88FF88",
-    "classifyimage": "#FFFF88"
+    "translate": "#88FF88"
 }
 
 const statuscolors = {
@@ -28,16 +29,20 @@ const statuscolors = {
 const clientinfos = {
     "::ffff:127.0.0.1": { "name" : "Seneca", "color": "#A7EEFA"},
     "::ffff:192.168.0.52": { "name" : "SY UPC Alt", "color": "#FF7F50"},
+    "::ffff:192.168.0.100": { "name" : "KD UPC", "color": "#ffd68b"},
+    "::ffff:192.168.0.101": { "name" : "KD UPC", "color": "#ffd68b"},
     "::ffff:192.168.0.151": { "name" : "RH UPC", "color": "#DAA520"},
     "::ffff:192.168.0.153": { "name" : "RH Workbook", "color": "#ADFF2F"},
     "::ffff:192.168.0.154": { "name" : "RH XMG", "color": "#A9A9A9"},
     "::ffff:192.168.0.156": { "name" : "RH BlueChip", "color": "#8888FF"},
+    "::ffff:192.168.0.210": { "name" : "ProxMox", "color": "#cc66ff"},
 }
 
 async function loadTasks() {
     const result = await fetch("/api/tasks")
     const jsonresult = await result.json()
     document.getElementById("classifyimage_count").innerHTML = jsonresult.taskcount["classifyimage"].toLocaleString()
+    document.getElementById("scanforvirus_count").innerHTML = jsonresult.taskcount["scanforvirus"].toLocaleString()
     document.getElementById("translate_count").innerHTML = jsonresult.taskcount["translate"].toLocaleString()
     document.getElementById("transcribe_count").innerHTML = jsonresult.taskcount["transcribe"].toLocaleString()
     const currenttime = jsonresult.time

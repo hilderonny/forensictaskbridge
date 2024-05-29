@@ -4,13 +4,13 @@ const apiRouter = express.Router()
 
 /**
  * @api {get} /api/tasks/result/:id Get task result
- * @apiVersion 1.0.0
+ * @apiVersion 2.1.0
  * @apiGroup General
  * 
  * @apiParam {String} id            ID of the task to check
  * 
  * @apiSuccess {String}                                      id                                    Unique ID of the task.
- * @apiSuccess {String}                                      type                                  Type of the task. Can be "transcribe", "translate" or "classifyimage"
+ * @apiSuccess {String}                                      type                                  Type of the task. Can be "classifyimage", "scanforvirus", "transcribe" or "translate"
  * @apiSuccess {String}                                      filename                              File name of the object within the input directory
  * @apiSuccess {Object}                                      properties                            Settings for the task. Depends on the task type
  * @apiSuccess {Boolean}                                     completedat                           ISO time of the completion of the task by the worker

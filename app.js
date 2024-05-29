@@ -18,6 +18,10 @@ app.use('/api/tasks/classifyimage/add', require('./api/tasks/classifyimage/add')
 app.use('/api/tasks/classifyimage/reportcompletion', require('./api/tasks/classifyimage/reportcompletion'))
 app.use('/api/tasks/classifyimage/take', require('./api/tasks/classifyimage/take'))
 
+app.use('/api/tasks/scanforvirus/add', require('./api/tasks/scanforvirus/add'))
+app.use('/api/tasks/scanforvirus/reportcompletion', require('./api/tasks/scanforvirus/reportcompletion'))
+app.use('/api/tasks/scanforvirus/take', require('./api/tasks/scanforvirus/take'))
+
 app.use('/api/tasks/transcribe/add', require('./api/tasks/transcribe/add'))
 app.use('/api/tasks/transcribe/reportcompletion', require('./api/tasks/transcribe/reportcompletion'))
 app.use('/api/tasks/transcribe/take', require('./api/tasks/transcribe/take'))

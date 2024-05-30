@@ -52,40 +52,63 @@
 
             <h2>Active workers</h2>
 
-        <table border="1">
-            <thead>
+            <table border="1">
+                <thead>
+                    <tr>
+                        <th>Client</th>
+                        <th>Type</th>
+                        <th>Status</th>
+                        <th>Last ping</th>
+                    </tr>
+                </thead>
+                <tbody id="workers"></tbody>
+            </table>
+        
+            <h2>Configuration</h2>
+
+            <table border="1">
                 <tr>
-                    <th>Client</th>
-                    <th>Type</th>
-                    <th>Status</th>
-                    <th>Last ping</th>
+                    <th>Input path</th>
+                    <td id="inputPath"></td>
+                    <td id="inputPathExists"></td>
+                    <td id="inputPathCanRead"></td>
+                    <td id="inputPathCanWrite"></td>
                 </tr>
-            </thead>
-            <tbody id="workers"></tbody>
-        </table>
-    
-        <h2>Configuration</h2>
-
-        <table border="1">
-            <tr>
-                <th>Input path</th>
-                <td id="inputPath"></td>
-                <td id="inputPathExists"></td>
-                <td id="inputPathCanRead"></td>
-                <td id="inputPathCanWrite"></td>
-            </tr>
-            <tr>
-                <th>Output path</th>
-                <td id="outputPath"></td>
-                <td id="outputPathExists"></td>
-                <td id="outputPathCanRead"></td>
-                <td id="outputPathCanWrite"></td>
-            </tr>
-        </table>
+                <tr>
+                    <th>Output path</th>
+                    <td id="outputPath"></td>
+                    <td id="outputPathExists"></td>
+                    <td id="outputPathCanRead"></td>
+                    <td id="outputPathCanWrite"></td>
+                </tr>
+            </table>
 
 
-        <p>
-            <a href="apidoc/">API documentation</a>
-        </p>
+            <p>
+                <a href="apidoc/">API documentation</a>
+            </p>
+        
+        </div>
+
+        <div class="right">
+
+            <h2>Tasks</h2>
+
+            <table border="1">
+                <thead>
+                    <tr>
+                        <th>Id</th>
+                        <th>Type</th>
+                        <th>Filename</th>
+                        <th>Status</th>
+                        <th>Duration</th>
+                        <th>Client</th>
+                        <th colspan="4">Actions</th>
+                    </tr>
+                </thead>
+                <tbody id="tasks"></tbody>
+            </table>
+            
+        </div>
     </body>
 </html>

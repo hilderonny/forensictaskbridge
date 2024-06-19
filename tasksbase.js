@@ -1,8 +1,7 @@
-const config = require("./config.json")
 const path = require("path")
 const fs = require("fs")
-const absoluteInputPath = path.resolve(config.inputPath)
-const absoluteOutputPath = path.resolve(config.outputPath)
+const absoluteInputPath = process.env.INPUTPATH
+const absoluteOutputPath = process.env.OUTPUTPATH
 const tasks = []
 
 let taskcount = {

@@ -1,10 +1,6 @@
-const testInputPath = "./testdata/input"
-const testOutputPath = "./testdata/input"
+process.env.INPUTPATH = "./testdata/input"
+process.env.OUTPUTPATH = "./testdata/input"
 
-jest.mock("../../config.json", ()=>({
-    inputPath: testInputPath,
-    outputPath: testOutputPath
-}), { virtual: true })
 
 const fs = require("fs")
 const path = require("path")

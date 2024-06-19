@@ -36,8 +36,6 @@
  *     }
  */
 
-const config = require("../config.json")
-
 const express = require("express")
 const fs = require("fs")
 const {resolve} = require("path")
@@ -45,7 +43,7 @@ const {resolve} = require("path")
 const apiRouter = express.Router()
 
 apiRouter.get('/', function(req, res) {
-    const absoluteInputPath = resolve(config.inputPath)
+    const absoluteInputPath = resolve(process.env.INPUTPATH)
     const absoluteInputPathExists = fs.existsSync(absoluteInputPath)
     let absoluteInputPathCanRead = false
     let absoluteInputPathCanWrite = false
@@ -59,7 +57,7 @@ apiRouter.get('/', function(req, res) {
             absoluteInputPathCanWrite = true
         } finally {}
     }
-    const absoluteOutputPath = resolve(config.outputPath)
+    const absoluteOutputPath = resolve(process.env.OUTPUTPATH)
     const absoluteOutputPathExists = fs.existsSync(absoluteOutputPath)
     let absoluteOutputPathCanRead = false
     let absoluteOutputPathCanWrite = false

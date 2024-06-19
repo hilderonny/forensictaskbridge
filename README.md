@@ -76,6 +76,8 @@ User=user
 Environment=PATH=/usr/bin:/usr/local/bin
 Environment=NODE_ENV=production
 Environment=PORT=30000
+Environment=INPUTPATH=/input
+Environment=OUTPUTPATH=/output
 WorkingDirectory=/forensictaskbridge/
 
 [Install]
@@ -88,4 +90,40 @@ Start the background process by
 sudo systemctl daemon-reload
 sudo systemctl start forensictaskbridge
 sudo systemctl enable forensictaskbridge
+```
+
+## Docker
+
+See [How to Build and Run a NodeJS app with Docker & GitHub Actions](https://blog.devgenius.io/how-to-build-and-run-a-nodejs-app-with-docker-github-actions-59eb264dfef5)
+
+### Create a docker image
+
+```
+docker build -t hilderonny2024/forensictaskbridge . 
+```
+
+### Running the docker image
+
+When running the image into a container, map the port 8080 of the container to a port where the
+outer world has access to (e.g. 80).
+
+```
+docker run --publish 80:8080 --mount source=forensictaskbridge_input,target=/input --mount source=forensictaskbridge_output,target=/output hilderonny2024/forensictaskbridge
+```
+
+Check whether the container runs correctly by opening `http://localhost:80`.
+
+## Publishing the docker image to Docker Hub
+
+```
+docker login
+docker push hilderonny2024/forensictaskbridge
+```
+
+Have a look at https://hub.docker.com/repository/docker/hilderonny2024/forensictaskbridge/ whether the publishing succeeded.
+
+It can now be received with
+
+```
+
 ```

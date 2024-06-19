@@ -107,7 +107,11 @@ docker build -t hilderonny2024/forensictaskbridge .
 When running the image into a container, map the port 8080 of the container to a port where the
 outer world has access to (e.g. 80).
 
-```
+```sh
+# Running with host folder mounts (recommended)
+docker run --publish 8088:8080 --mount type=bind,source=//c/test/input,target=/input --mount type=bind,source=//c/test/output,target=/output hilderonny2024/forensictaskbridge
+
+# Running with docker volumes
 docker run --publish 80:8080 --mount source=forensictaskbridge_input,target=/input --mount source=forensictaskbridge_output,target=/output hilderonny2024/forensictaskbridge
 ```
 
@@ -125,5 +129,5 @@ Have a look at https://hub.docker.com/repository/docker/hilderonny2024/forensict
 It can now be received with
 
 ```
-
+docker pull hilderonny2024/forensictaskbridge
 ```

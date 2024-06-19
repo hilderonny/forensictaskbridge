@@ -1,6 +1,8 @@
-process.env.INPUTPATH = "./testdata/input"
-process.env.OUTPUTPATH = "./testdata/input"
+testInputPath = "./testdata/input"
+testOutputPath = "./testdata/input"
 
+process.env.INPUTPATH = testInputPath
+process.env.OUTPUTPATH = testOutputPath
 
 const fs = require("fs")
 const path = require("path")

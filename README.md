@@ -109,10 +109,10 @@ outer world has access to (e.g. 80).
 
 ```sh
 # Running with host folder mounts (recommended)
-docker run --publish 8088:8080 --mount type=bind,source=//c/test/input,target=/input --mount type=bind,source=//c/test/output,target=/output --detach hilderonny2024/forensictaskbridge
+docker run --publish 8088:8080 --mount type=bind,source=//c/test/input,target=/input --mount type=bind,source=//c/test/output,target=/output --detach --name forensictaskbridge hilderonny2024/forensictaskbridge
 
 # Running with docker volumes
-docker run --publish 80:8080 --mount source=forensictaskbridge_input,target=/input --mount source=forensictaskbridge_output,target=/output --detach hilderonny2024/forensictaskbridge
+docker run --publish 80:8080 --mount source=forensictaskbridge_input,target=/input --mount source=forensictaskbridge_output,target=/output --detach --name forensictaskbridge hilderonny2024/forensictaskbridge
 ```
 
 Check whether the container runs correctly by opening `http://localhost:80`.
